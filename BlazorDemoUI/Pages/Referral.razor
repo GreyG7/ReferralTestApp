@@ -1,0 +1,146 @@
+﻿@page "/Referral"
+
+@using DataAccessLibrary
+@using DataAccessLibrary.Models
+@using BlazorDemoUI.Models
+
+@inject IReferralData dbReferral
+
+
+<h3>Referrals</h3>
+<button id="btnInsertReferral" @onclick="@Show" type="button" class="btn btn-primary">Insert a New Referral</button>
+<br />
+<br />
+<div hidden="@showInsertForm">
+    <EditForm Model="@newReferral" OnValidSubmit="@InsertReferral">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        Category: <InputText id="category" @bind-Value="newReferral.Category" /><br /><br />
+        Referral: <InputText id="referral" @bind-Value="newReferral.Referral" /><br /><br />
+        Company: <InputText id="company" @bind-Value="newReferral.Company" /><br /><br />
+        Website: <InputText id="website" @bind-Value="newReferral.Website" /><br /><br />
+
+        Instructions: <InputTextArea id="instructions" @bind-Value="newReferral.Instructions" /><br /><br />
+        <button type="submit" class="btn btn-primary">Submit</button><br /><br />
+    </EditForm>
+</div>
+@if (referral is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <button @onclick="@SortCategory" type="button" class="btn btn-primary">Sort by Category</button>
+    <button @onclick="@SortCompany" type="button" class="btn btn-primary">Sort by Company</button>
+
+    <br />
+    <br />
+
+    <div class="row gutters-sm">
+        @foreach (var referral in referral)
+        {
+            changeStyle(@referral.Category);
+            <div class="col-md-4 mb-3">
+                <div class="card" style=@customBorder>
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <div class="mt-3">
+                                <h4><a style="color: #0D2363 !important;" href="@referral.Website">@referral.Company</a></h4>
+                                <p class="text-secondary mb-1">@referral.Category</p>
+                                <h5 style=@customFont class="text-secondary mb-1">@referral.Referral</h5>
+                                <p class="text-secondary mb-1">@referral.Instructions</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="ml-auto mr-3">
+                                <button class="btn" style=@customButton ><i class="fas fa-pencil-alt" style=@customFont></i> Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    
+}
+
+@code {
+    private List<ReferralModel> referral;
+
+    private DisplayReferralModel newReferral = new DisplayReferralModel();
+
+    private bool showInsertForm { get; set; } = true;
+
+    private string sortBy { get; set; } = "ASC";
+
+    private string customBorder;
+    private string customFont;
+    private string customButton;
+
+    private void changeStyle(string category)
+    {
+        if (category == "Communication")
+        {
+            customBorder = "border-top: 4px solid purple";
+            customFont = "color: purple !important;";
+            customButton = "border-color: purple !important; color: purple;";
+        }
+        else if (category == "Finance")
+        {
+            customBorder = "border-top: 4px solid green";
+            customFont = "color: green !important;";
+            customButton = "border-color: green !important; color: green;";
+        }
+        else
+        {
+            customBorder = "border-top: 4px solid red";
+            customFont = "color: red !important;";
+            customButton = "border-color: red !important; color: red;";
+        }
+    }
+
+    private void Show()
+    {
+        showInsertForm = !showInsertForm;
+    }
+
+    private async void SortCategory()
+    {
+        sortBy = sortBy == "ASC" ? "DESC" : "ASC";
+        referral = await dbReferral.GetReferral("Category", sortBy);
+        await OnInitializedAsync();
+    }
+
+    private async void SortCompany()
+    {
+        sortBy = sortBy == "ASC" ? "DESC" : "ASC";
+        referral = await dbReferral.GetReferral("Company", sortBy);
+        await OnInitializedAsync();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        referral = await dbReferral.GetReferral("Id", sortBy);
+    }
+
+    private async void InsertReferral()
+    {
+        ReferralModel r = new ReferralModel
+        {
+            Category = newReferral.Category,
+            Referral = newReferral.Referral,
+            Company = newReferral.Company,
+            Website = newReferral.Website,
+            Instructions = newReferral.Instructions
+        };
+
+        await dbReferral.InsertReferral(r);
+
+        referral.Add(r);
+
+        await OnInitializedAsync();
+
+        newReferral = new DisplayReferralModel();
+    }
+}

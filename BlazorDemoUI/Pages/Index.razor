@@ -1,0 +1,114 @@
+﻿@page "/"
+
+@using BlazorDemoUI.Data
+@using BlazorDemoUI.PageClass
+
+<!--
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+
+                <div class="col-md-2">
+                    <label>Category: </label>
+                </div>
+                <div class="col-md-10">
+                    <input @bind-value="refer.Category" type="text" style="width:100%;" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label>Referral: </label>
+                </div>
+                <div class="col-md-10">
+                    <input @bind="refer.Referral" type="text" style="width:100%;" />
+                </div>
+            </div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <label>Image: </label>
+        </div>
+        <div class="col-md-10">
+            <InputFile OnChange="HandleFileSelection" />
+        </div>
+    </div>
+
+<div class="row">
+    <div class="col-md-2">
+        <label>Company: </label>
+    </div>
+    <div class="col-md-10">
+        <input @bind="refer.Company" type="text" style="width:100%;" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <label>Instructions: </label>
+    </div>
+    <div class="col-md-10">
+        <input @bind="refer.Instructions" type="text" style="width:100%;" />
+    </div>
+
+</div>
+
+        </div>
+<div class="col-md-6">
+    <img src="@imgSrc" width="200" height="200" style="border:1px solid #000000; margin-top:10px;" />
+</div>
+    </div>
+<div class="row">
+    <div class="col-md-12">
+
+        <button @onclick="SaveRefer" class="btn btn-primary" style="width:100%; margin-top:10px;">Save</button>
+        <button @onclick="ReadRefer" class="btn btn-primary" style="width:100%; margin-top:10px;">Read</button>
+        <span style="font-weight:bold; font-size:24px">@Message</span>
+
+    </div>
+</div>
+</div>
+    -->
+
+@code{
+    /*
+    string imgSrc = "";
+    string Message = "";
+    IFileListEntry file = null;
+    byte[] _fileBytes = null;
+    Refer refer = new Refer();
+
+    public async Task HandleFileSelection(IFileListEntry[] files)
+    {
+        if (files.Count() > 0)
+        {
+            file = files.FirstOrDefault();
+            using (var ms = new MemoryStream())
+            {
+                await file.Data.CopyToAsync(ms);
+                _fileBytes = ms.ToArray();
+
+                ReferPage referPage = new ReferPage(referService);
+                var photo = referPage.GetImage(Convert.ToBase64String(_fileBytes));
+                imgSrc = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(photo));
+            }
+        }
+    }
+
+    public void SaveRefer()
+    {
+        ReferPage referPage = new ReferPage(referService);
+        Message = referPage.SaveInformation(_fileBytes, refer);
+
+        refer = new Refer();
+        imgSrc = "";
+    }
+
+    public void ReadRefer()
+    {
+        ReferPage referPage = new ReferPage(referService);
+        refer = referPage.GetSavedRefer();
+        imgSrc = refer.ImageUrl;
+        Message = "";
+    }
+    */
+}
